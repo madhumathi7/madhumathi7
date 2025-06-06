@@ -1,30 +1,57 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+public class ToDoListApp {
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
+        ArrayList<String> todoList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
-        String input;
+        int choice;
 
-        System.out.println("Welcome to Task Manager CLI");
         while (true) {
-            System.out.print("> ");
-            input = scanner.nextLine();
+            System.out.println("\n📋 To-Do List Menu:");
+            System.out.println("1. Add Task");
+            System.out.println("2. View Tasks");
+            System.out.println("3. Delete Task");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option (1-4): ");
+            choice = scanner.nextInt();
+            scanner.nextLine();  // consume newline
 
-            if (input.startsWith("add ")) {
-                manager.addTask(input.substring(4));
-            } else if (input.equals("list")) {
-                manager.listTasks();
-            } else if (input.startsWith("done ")) {
-                manager.markTaskDone(Integer.parseInt(input.substring(5)));
-            } else if (input.startsWith("del ")) {
-                manager.deleteTask(Integer.parseInt(input.substring(4)));
-            } else if (input.equals("exit")) {
-                break;
-            } else {
-                System.out.println("Unknown command. Use add/list/done/del/exit.");
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter task: ");
+                    String task = scanner.nextLine();
+                    todoList.add(task);
+                    System.out.println("✅ Task added!");
+                    break;
+                case 2:
+                    System.out.println("\n📄 Your Tasks:");
+                    if (todoList.isEmpty()) {
+                        System.out.println("No tasks yet!");
+                    } else {
+                        for (int i = 0; i < todoList.size(); i++) {
+                            System.out.println((i + 1) + ". " + todoList.get(i));
+                        }
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter task number to delete: ");
+                    int taskNum = scanner.nextInt();
+                    scanner.nextLine();  // consume newline
+                    if (taskNum >= 1 && taskNum <= todoList.size()) {
+                        todoList.remove(taskNum - 1);
+                        System.out.println("❌ Task removed.");
+                    } else {
+                        System.out.println("⚠ Invalid task number.");
+                    }
+                    break;
+                case 4:
+                    System.out.println("👋 Exiting To-Do List. Goodbye!");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("⚠ Please enter a valid option.");
             }
         }
-        scanner.close();
     }
 }
